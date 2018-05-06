@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+	<!-- 视口设置 -->
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<!-- 引入bootstrap的css文件 -->
+	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="js/Validform/css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/common.css">
+	<link href="css/style-bar.css" rel="stylesheet" type="text/css">
+	<link href="css/style.css" rel="stylesheet" type="text/css">
+	<link href="css/sb-admin.css" rel="stylesheet">
+	<!-- 引入jquery的js文件 -->
+	<script type="text/javascript" src="js/bootstrap/js/jquery.js"></script>
+	<!-- 引入bootstrap的js文件 -->
+	<script type="text/javascript" src="js/bootstrap/js/bootstrap.js"></script>
+	<!-- 引入angularjs的js文件 -->
+	<script type="text/javascript" src="js/angularjs/angular.js"></script>
+	<script type="text/javascript" src="js/Validform/js/Validform_v5.3.2.js"></script>
+	<!-- 引入layer.js插件 -->
+	<script type="text/javascript" src="js/layer/layer.js"></script>
+	<!-- 引入全局配置js -->
+	<script type="text/javascript" src="js/global.js"></script>
+</head>
+<body ng-controller="deptController">
+<!-- 网页头部-->
+<script type="text/javascript">
+
+	//轮播时间间隔设置
+	$(document).ready(function(e) {
+		$('.carousel').carousel({
+        interval: 4000
+    });
+    $(document).ready(function(e) {
+        //初始化工具提示
+		$('a,button[data-toggle="tooltip"]').tooltip();		
+		$('#fuckhtml').popover();
+    	});
+	});
+
+	//消息提示整体亮度控制
+	$(document).ready(function(e) {		
+		//鼠标移上
+		$('#notice').mouseover(function(){
+			if($('#infonotice').text()!="0"){
+				$('#infonotice').addClass('noticeBg');	
+			}else{
+				$('#infonotice').css("background-color","#999");
+			}
+				
+		});		
+		//鼠标离开
+		$('#notice').mouseout(function(){
+			if($('#infonotice').text()!="0"){
+				$('#infonotice').removeClass('noticeBg');
+			}else{
+				$('#infonotice').css("background-color","#777");
+			}
+			
+		});						
+	});
+
+	//登陆界面模态层
+	$(document).ready(function(e) 
+	{        
+	/*单击按钮弹出模态层*/
+	$('#modalBtn').click(function(e){
+		$('#myModal').modal
+		(
+			{
+				backdrop:'static', /*点击黑色区域不关闭*/
+				keyboard:false     /*ESC键不关闭*/
+			}
+		);
+
+		$('#navigation').fadeOut("fast").addClass("fixed-top-changed");
+	});	
+
+
+    /*关闭时回到原来尺寸*/
+	$('#closemodal').click(function(e){
+		$('#navigation').removeClass("fixed-top-changed").delay(300).fadeIn("fast");
+		});
+    });
+	
+	// $(document).ready(function(){
+	// 	//一行代码搞定，提交表单的时候会自动触发验证程序
+	// 	$('#loginform').Validform({
+	// 		tiptype:0,
+	// 		ajaxPost:true,
+	// 		beforeSubmit:function(curform){return false;}
+	// 	});
+	// });
+	</script>
+	<!--登陆界面模态层-->
+	<div class="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" id="closemodal" data-dismiss="modal">&times;</button>
+					<h4 class="text-center">切换用户</h4>
+				</div>
+
+				<div class="modal-body">
+					<form id="loginform" class="form-horizontal" method="post" action="login/login.action">
+			        	<div class="form-group"> 
+			                <label for="userName" class="col-sm-4 control-label">账号</label>
+			                <div class="col-sm-6">
+			                	<input type="text" datatype="*" name="empNum" id="empNum" class="form-control" placeholder="请输入账号">               
+			                </div>
+			            </div>
+			            
+			            <div class="form-group">
+			                <label for="userPwd" class="col-sm-4 control-label">密码</label>
+			                <div class="col-sm-6">
+			                	<input datatype="*" type="password" name="password" id="password" class="form-control" placeholder="请输入密码 ">              
+			                </div>
+			            </div>
+
+			            <div class="form-group">
+			            	<div class="col-sm-3 col-sm-offset-7">
+			            		<input type="submit" id="btn2" class="btn btn-primary btn-block" data-loading-text="正在确认..." value="登录"> 		            		
+			                </div>
+			            </div>
+		        	</form>  
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+	<!--/登陆界面模态层-->
+
+	<!--导航条-->
+	<nav id="navigation" class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+
+			<div class="navbar-header" >
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myCollapse1">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="./cloud_oa/pages/index.jsp" class="navbar-brand">
+					<img src="image/default-transparent.png" height="20"/>
+				</a>
+			</div>
+			<!--/.navbar-header-->
+
+			<form if="userform" action="">
+			<div class="collapse navbar-collapse navbar-right" id="myCollapse1">
+				<ul class="nav navbar-nav nav-right">
+					<li class="dropdown">
+						<a href="empInfo/query.action" data-toggle="dropdown">
+							当前用户：系统管理员
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu ">
+							<li>
+								<a href="#" id="modalBtn">切换用户</a>
+							</li>
+							<li>
+								<a href="./indexLogin.html">退出</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a id="notice" href="./在线消息-未阅消息.html">
+							新消息：
+							<span id="infonotice" class="badge">20</span>
+						</a>
+					</li>
+					
+				</ul>
+
+			</div>
+			<!--/.collapse-->
+			</form>
+
+		</div>
+		<!--/.container-fluid-->
+	</nav>
+	<!--/导航条-->
+
+	<!--轮播容器-->
+	<header id="myCarousel" class="carousel slide">
+		<!-- Indicators -->
+		<ol class="carousel-indicators">
+			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+			<li data-target="#myCarousel" data-slide-to="1"></li>
+			<li data-target="#myCarousel" data-slide-to="2"></li>
+		</ol>
+		
+		<!-- Wrapper for slides -->
+		<div class="carousel-inner">
+			<div class="item active">
+				<div class="fill" style="background-image:url('image/100.jpg');"></div>
+				<div class="carousel-caption">
+					<h2>学JAVA开发，到中软国际。</h2>
+				</div>
+			</div>
+			<div class="item">
+				<div class="fill" style="background-image:url('image/101.jpg');"></div>
+				<div class="carousel-caption">
+					<h2>学iOS/Android开发，到中软国际。</h2>
+				</div>
+			</div>
+			<div class="item">
+				<div class="fill" style="background-image:url('image/102.jpg');"></div>
+				<div class="carousel-caption">
+					<h2>学C++开发，到中软国际。</h2>
+				</div>
+			</div>
+		</div>
+		<!-- Controls -->
+		<a class="left carousel-control" href="#myCarousel" data-slide="prev">
+			<span class="icon-prev"></span>
+		</a>
+		<a class="right carousel-control" href="#myCarousel" data-slide="next">
+			<span class="icon-next"></span>
+		</a>
+	</header>
+	<!--/轮播容器-->
+	
+	<!--网页分类-->
+	<nav class="navbar navbar-default hidden-sm hidden-xs">
+		<div class="container">
+			<div class="collapse navbar-collapse" id="myCollapse2">
+			
+				<ul class="nav navbar-nav">
+				
+					<li>
+						<a href="./index.html">系统首页</a>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							工作安排
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="./工作安排-日程安排.html">日程安排</a>
+							</li>
+							<li>
+								<a href="./工作安排-综合查询.html">综合查询</a>
+							</li>
+							<li>
+								<a href="./工作安排-日历查看.html">日历查看</a>
+							</li>
+							<li>
+								<a href="./工作安排-代读设置.html">代读设置</a>
+							</li>
+							<li>
+								<a href="./工作安排-待办审批.html">待办审批</a>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							名片夹
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="./名片夹-联系人查询.html">联系人查询</a>
+							</li>
+							<li>
+								<a href="./名片夹-名片夹分类.html">名片夹分类</a>
+							</li>
+							<li>
+								<a href="./名片夹-公司通讯录.html">公司通讯录</a>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							消息收发
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="./在线消息-发送新消息.html">发送消息</a>
+							</li>
+							<li>
+								<a href="./在线消息-草稿箱.html">草稿箱</a>
+							</li>
+							<li>
+								<a href="./在线消息-发件箱.html">已发送消息</a>
+							</li>
+							<li>
+								<a href="./在线消息-收件箱.html">收到的消息</a>
+							</li>
+							<li>
+								<a href="./在线消息-未阅消息.html">未阅的消息(<span name="count">0</span>)</a>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							云文件存储
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="./云文件存储-云文件目录.html">云文件目录</a>
+							</li>
+							<li>
+								<a href="./云文件存储-我的云共享.html">我的云共享</a>
+							</li>
+						</ul>
+					</li>
+
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							会议管理
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="./会议管理-会议室信息.html">会议室信息</a>
+							</li>
+							<li>
+								<a href="./会议管理-会议预约情况.html">会议预约情况</a>
+							</li>
+							<li>
+								<a href="./会议管理-我要参加的会议.html">我要参加的会议</a>
+							</li>
+							<li>
+								<a href="./会议管理-我发布的会议.html">我发布的会议</a>
+							</li>
+						</ul>
+					</li>
+
+					
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							系统管理
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="QueryDept.html">部门管理</a>
+							</li>
+							<li>
+								<a href="QueryJob.html">职务管理</a>
+							</li>
+							<li>
+								<a href="QueryEmp.html">员工管理</a>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="./QueryCargo.html">
+							资产管理
+						</a>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							车辆管理
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="./车辆管理-查看车辆信息.html">查看车辆信息</a>
+							</li>
+							<li>
+								<a href="./车辆管理-派车待办.html">派车待办</a>
+							</li>
+							<li>
+								<a href="./车辆管理-派车记录.html">派车记录</a>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							外派人才
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="./外派人才-外派人才列表.html">外派人才列表</a>
+							</li>
+							<li>
+								<a href="./外派人才-合作公司列表.html">合作公司列表</a>
+							</li>
+							<li>
+								<a href="./外派人才-公司需求列表.html">公司需求列表</a>
+							</li>
+							<li>
+								<a href="./外派人才-外派记录列表.html">外派记录显示</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="./QueryNotice.html">
+							系统公告
+						</a>
+					</li>
+				</ul>
+				
+			</div>
+			<!--/.collapse-->
+		</div>
+	</nav>
+	<!-- 网页头部完成-->	
+
+
+
+	<div class="container">			
+			<!-- 左侧区域开始 -->		
+				<div class="col-md-3" id="myScrollSpy" style="margin-top:30px;">
+	        	<dropdown class="col-xs-12" style="margin-bottom:30px;"> 
+				<input id="toggle1" type="checkbox" checked>
+				<label for="toggle1"class="animate">系统管理<i class="fa fa-bars float-right"></i></label>
+				<ul class="animate">
+					<a href="./QueryDept.html">
+						<li class="animate">部门管理<i class="fa fa-code float-right"></i></li>
+					</a>
+					<a href="./QueryJob.html">
+						<li class="animate actived">职务管理<i class="fa fa-code float-right"></i></li>
+					</a>
+	                <a href="./QueryEmp.html">
+	                	<li class="animate">员工管理<i class="fa fa-code float-right"></i></li>
+	                </a>
+				</ul>
+				</dropdown>
+				</div>		
+			<!-- 左侧区域结束 -->
+			<!-- 右侧区域开始 -->
+			<div class="col-md-9">				
+				<!-- 数据表开始 -->
+				<table class="table table-striped table-bordered">
+					<thead>
+						<tr>
+							<th>职务编号</th>
+							<th>职务名称</th>
+							<th>职务描述</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- 遍历数据 -->
+						<tr ng-repeat="item in data">
+							<td>{{item.jobId}}</td>
+							<td>{{item.jobName}}</td>
+							<td>{{item.jobDesc}}</td>
+							<td>
+								<a href="UpdateJob.html?jobId={{item.jobId}}" class="btn btn-success btn-xs">修改</a>	
+								<input type="button" value="删除" class="btn btn-danger btn-xs" ng-click="del(item.jobId);">						
+							</td>
+						</tr>						
+					</tbody>
+				</table>
+				<!-- 数据表结束 -->
+				<a href="AddJob.html" class="btn btn-primary btn-block">增加新职务</a>				
+			</div>
+			<!-- 右侧区域结束 -->
+		</div>
+	<script type="text/javascript">
+
+		// 创建模块
+		var myApp = angular.module('myApp',[]);
+
+		// 创建控制器
+		myApp.controller('deptController',function($scope,$http){
+
+			// 请求地址
+			var url = URL + '/QueryJobServlet';
+
+			// 访问后台数据接口			
+			var promise = $http.get(url);
+
+			// 请求成功处理
+			promise.success(function(data){
+				// 在作用域中存储数据
+				$scope.data = data;
+			});	
+
+			// 请求失败处理
+			promise.error(function(){
+				alert('请求失败');
+			});
+
+			// 删除数据功能
+			$scope.del = function(jobId) {
+
+				// 删除确认
+				var flag = confirm("你确定要删除此部门吗？");
+
+				if (!flag) {
+					return;
+				}
+
+				// 请求地址
+				var url = URL + '/DelJobServlet';
+				
+				// 访问后台数据接口			
+				var promise = $http.get(url,{
+					params:{
+						jobId:jobId
+					}
+				});
+
+				// 请求成功处理
+				promise.success(function() {
+					alert('删除成功！');
+					location.reload();	//刷新当前网页				
+				});	
+
+				// 请求失败处理
+				promise.error(function(){
+					alert('请求失败');
+				});
+
+			}
+
+
+		});
+
+	</script>
+	<!-- 网页底部开始 -->
+	<div ng-include="'inc/footer.html'"></div>
+	<!-- 网页底部结束 -->
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+	<!-- 视口设置 -->
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<!-- 引入bootstrap的css文件 -->
+	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.css">
+</head>
+<body ng-controller="deptController">
+		
+	<div class="container">		
+		<div class="row">			
+			<!-- 左侧区域开始 -->
+			<div class="col-md-3">
+				
+			</div>
+			<!-- 左侧区域结束 -->
+			<!-- 右侧区域开始 -->
+			<div class="col-md-8">
+				<h3 class="page-header">增加新职务</h3>
+				<!-- 表单开始 -->
+				<form class="form-horizontal">
+					<div class="form-group">
+						<label for="" class="col-sm-2">职务名称</label>
+						<div class="col-sm-8">
+							<input type="text" placeholder="请输入部门名称" name="deptName" class="form-control" ng-model="deptName">
+						</div>				
+					</div>
+					<div class="form-group">
+						<label for="" class="col-sm-2">职务描述</label>
+						<div class="col-sm-8">
+							<input type="text" placeholder="请输入部门描述" name="deptDesc" class="form-control" ng-model="deptDesc">
+						</div>				
+					</div>					
+					<div class="form-group">				
+						<div class="col-sm-8 col-sm-offset-2">
+							<input type="button" value="提交表单" class="btn btn-primary" ng-click="add();">
+						</div>				
+					</div>
+				</form>
+				<!-- 表单结束 -->
+			</div>
+			<!-- 右侧区域结束 -->
+		</div>
+	</div>
+
+	<!-- 引入jquery的js文件 -->
+	<script type="text/javascript" src="js/bootstrap/js/jquery.js"></script>
+	<!-- 引入bootstrap的js文件 -->
+	<script type="text/javascript" src="js/bootstrap/js/bootstrap.js"></script>	
+	<!-- 引入angularjs的js文件 -->
+	<script type="text/javascript" src="js/angularjs/angular.js"></script>
+	<!-- 引入全局配置js -->
+	<script type="text/javascript" src="js/global.js"></script>
+	<script type="text/javascript">
+
+		// 创建模块
+		var myApp = angular.module('myApp',[]);
+
+		//发送post请求必须要设置修改请求报头为x-www-form-urlencoded，否则以json字符串形式发送到服务器端!!!
+		myApp.config(function($httpProvider) {
+		    $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
+		    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+		 
+		    // Override $http service's default transformRequest
+		    $httpProvider.defaults.transformRequest = [function(data) {
+		        /**
+		         * The workhorse; converts an object to x-www-form-urlencoded serialization.
+		         * @param {Object} obj
+		         * @return {String}
+		         */
+		        var param = function(obj) {
+		            var query = '';
+		            var name, value, fullSubName, subName, subValue, innerObj, i;
+		 
+		            for (name in obj) {
+		                value = obj[name];
+		 
+		                if (value instanceof Array) {
+		                    for (i = 0; i < value.length; ++i) {
+		                        subValue = value[i];
+		                        fullSubName = name + '[' + i + ']';
+		                        innerObj = {};
+		                        innerObj[fullSubName] = subValue;
+		                        query += param(innerObj) + '&';
+		                    }
+		                } else if (value instanceof Object) {
+		                    for (subName in value) {
+		                        subValue = value[subName];
+		                        fullSubName = name + '[' + subName + ']';
+		                        innerObj = {};
+		                        innerObj[fullSubName] = subValue;
+		                        query += param(innerObj) + '&';
+		                    }
+		                } else if (value !== undefined && value !== null) {
+		                    query += encodeURIComponent(name) + '='
+		                            + encodeURIComponent(value) + '&';
+		                }
+		            }
+		 
+		            return query.length ? query.substr(0, query.length - 1) : query;
+		        };
+		 
+		        return angular.isObject(data) && String(data) !== '[object File]'
+		                ? param(data)
+		                : data;
+		    }];
+		});
+
+
+		// 创建控制器
+		myApp.controller('deptController',function($scope,$http){
+
+			// 增加功能
+			$scope.add = function() {
+
+				var url = URL + '/AddDeptServlet';
+
+				// post请求的快捷方法
+				var promise = $http.post(url,{					
+					deptName:$scope.deptName,
+					deptDesc:$scope.deptDesc					
+				});
+
+				promise.success(function(){
+					alert('增加部门成功');	
+					location.href = 'QueryDept.html';								
+				});
+
+				promise.error(function(data,status,headers,config) {
+					alert('请求失败' + status);
+				});
+
+			}
+			
+		});
+
+	</script>
+</body>
+</html>

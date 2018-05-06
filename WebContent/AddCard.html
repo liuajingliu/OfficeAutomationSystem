@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html ng-app="myModule">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+	<!-- 视口设置 -->
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<!-- 引入bootstrap的css文件 -->
+	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.css">
+	<!-- 引入datepicker插件css -->
+	<link rel="stylesheet" type="text/css" href="js/datepicker/jquery.datetimepicker.css">
+</head>
+<body ng-controller="deptController">
+		
+	<div class="container">		
+		<div class="row">			
+			<!-- 左侧区域开始 -->
+			<div class="col-md-3">				
+			</div>
+			<!-- 左侧区域结束 -->
+			<!-- 右侧区域开始 -->
+			<div class="col-md-8">
+				<h3 class="page-header">增加新员工</h3>
+				<!-- 表单开始 -->
+				<form class="form-horizontal">
+					<div class="form-group">
+						<label for="" class="col-sm-2">员工姓名</label>
+						<div class="col-sm-8">
+							<input type="text" placeholder="请输入姓名" name="empName" class="form-control" ng-model="empName">
+						</div>				
+					</div>
+					<div class="form-group">
+						<label for="" class="col-sm-2">电话</label>
+						<div class="col-sm-8">
+							<input type="text" placeholder="请输入电话" name="empPhone" class="form-control" ng-model="empPhone">
+						</div>				
+					</div>	
+					<div class="form-group">
+						<label for="" class="col-sm-2">出生日期</label>
+						<div class="col-sm-8">
+							<input type="text" placeholder="选择日期" id="empBirthday" name="empBirthday" class="form-control" ng-model="empBirthday" ng-blur="setDate();">												
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="" class="col-sm-2">邮件</label>
+						<div class="col-sm-8">
+							<input type="text" placeholder="请输入邮件账号" name="empEmail" class="form-control" ng-model="empEmail">
+						</div>				
+					</div>	
+					<div class="form-group">
+						<label for="" class="col-sm-2">QQ</label>
+						<div class="col-sm-8">
+							<input type="text" placeholder="请输入QQ账号" name="empQQ" class="form-control" ng-model="empQQ">
+						</div>				
+					</div>	
+					<div class="form-group">
+						<label for="" class="col-sm-2">选择部门</label>
+						<div class="col-sm-8">
+							<select name="deptId" class="form-control" ng-model="deptId" ng-options="item.deptId as item.deptName for item in depts">								
+							</select>							
+						</div>				
+					</div>	
+					<div class="form-group">
+						<label for="" class="col-sm-2">选择职务</label>
+						<div class="col-sm-8">
+							<select name="jobId" class="form-control" ng-model="jobId"  ng-options="item.jobId as item.jobName for item in jobs">								
+							</select>
+						</div>				
+					</div>			
+					<div class="form-group">				
+						<div class="col-sm-8 col-sm-offset-2">
+							<input type="button" value="增加员工" class="btn btn-primary" ng-click="add();">
+						</div>				
+					</div>
+				</form>
+				<!-- 表单结束 -->
+			</div>
+			<!-- 右侧区域结束 -->
+		</div>
+	</div>
+
+	<!-- 引入jquery的js文件 -->
+	<script type="text/javascript" src="js/bootstrap/js/jquery.js"></script>
+	<!-- 引入bootstrap的js文件 -->
+	<script type="text/javascript" src="js/bootstrap/js/bootstrap.js"></script>	
+	<!-- 引入angularjs的js文件 -->
+	<script type="text/javascript" src="js/angularjs/angular.js"></script>
+	<!-- 引入layer.js插件 -->
+	<script type="text/javascript" src="js/layer/layer.js"></script>
+	<!-- 引入全局配置js -->
+	<script type="text/javascript" src="js/global.js"></script>
+	<!-- 引入datepicker插件js -->
+	<script type="text/javascript" src="js/datepicker/jquery.datetimepicker.js"></script>
+	<script type="text/javascript">
+
+		// 网页加载完毕事件
+		$(document).ready(function(){
+			
+			// 增加日历功能
+			$('#empBirthday').datetimepicker({				
+				lang:'ch',
+				timepicker:false,
+				format:'Y-m-d',
+				formatDate:'Y/m/d'				
+			});
+
+		});
+
+		// 创建模块
+		var myModule = angular.module('myModule',[]);
+
+		//发送post请求必须要设置修改请求报头为x-www-form-urlencoded，否则以json字符串形式发送到服务器端!!!
+		myModule.config(function($httpProvider) {
+		    $httpProvider.defaults.headers.put['Content-Type'] = 'application/x-www-form-urlencoded';
+		    $httpProvider.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+		 
+		    // Override $http service's default transformRequest
+		    $httpProvider.defaults.transformRequest = [function(data) {
+		        /**
+		         * The workhorse; converts an object to x-www-form-urlencoded serialization.
+		         * @param {Object} obj
+		         * @return {String}
+		         */
+		        var param = function(obj) {
+		            var query = '';
+		            var name, value, fullSubName, subName, subValue, innerObj, i;
+		 
+		            for (name in obj) {
+		                value = obj[name];
+		 
+		                if (value instanceof Array) {
+		                    for (i = 0; i < value.length; ++i) {
+		                        subValue = value[i];
+		                        fullSubName = name + '[' + i + ']';
+		                        innerObj = {};
+		                        innerObj[fullSubName] = subValue;
+		                        query += param(innerObj) + '&';
+		                    }
+		                } else if (value instanceof Object) {
+		                    for (subName in value) {
+		                        subValue = value[subName];
+		                        fullSubName = name + '[' + subName + ']';
+		                        innerObj = {};
+		                        innerObj[fullSubName] = subValue;
+		                        query += param(innerObj) + '&';
+		                    }
+		                } else if (value !== undefined && value !== null) {
+		                    query += encodeURIComponent(name) + '='
+		                            + encodeURIComponent(value) + '&';
+		                }
+		            }
+		 
+		            return query.length ? query.substr(0, query.length - 1) : query;
+		        };
+		 
+		        return angular.isObject(data) && String(data) !== '[object File]'
+		                ? param(data)
+		                : data;
+		    }];
+		});
+
+
+		// 创建控制器
+		myModule.controller('deptController',function($scope,$http) {
+
+			// 从后台获得部门列表数据
+			var url =  URL + '/QueryDeptServlet';
+
+			var promise = $http.get(url);
+
+			promise.success(function(data){
+				$scope.depts = data;							
+			});
+
+			promise.error(function(data,status,headers,config) {
+				layer.msg('请求失败' + status);
+			});
+
+			// 从后台获得职务列表数据
+			var url2 =  URL + '/QueryJobServlet';
+
+			var promise2 = $http.get(url2);
+
+			promise2.success(function(data){
+				$scope.jobs = data;		
+				console.log(data);					
+			});
+
+			promise2.error(function(data,status,headers,config) {
+				layer.msg('请求失败' + status);
+			});
+			
+
+			// 增加功能
+			$scope.add = function() {
+
+				var url = URL + '/AddEmpServlet';
+
+				// post请求的快捷方法
+				var promise = $http.post(url,{					
+					empName:$scope.empName,
+					empPhone:$scope.empPhone,
+					empEmail:$scope.empEmail,
+					empQQ:$scope.empQQ,
+					empBirthday:$scope.empBirthday,
+					deptId:$scope.deptId,
+					jobId:$scope.jobId	
+														
+				});
+
+				promise.success(function(){
+					layer.msg('增加员工成功');	
+
+					setTimeout(function() {
+						location.href = 'QueryEmp.html';
+					},1000);								
+				});
+
+				promise.error(function(data,status,headers,config) {
+					layer.msg('请求失败' + status);
+				});
+
+			}
+
+			//手动设置日期数据
+			$scope.setDate = function() {
+
+				$scope.empBirthday = $('#empBirthday').val();
+
+			}
+
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html ng-app="myModule">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+	<!-- 视口设置 -->
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+	<meta name="description" content="Free HTML5 Website Template by FreeHTML5.co" />
+	<meta name="keywords" content="free html5, free template, free bootstrap, free website template, html5, css3, mobile first, responsive" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<meta property="og:title" content=""/>
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content=""/>
+	<meta property="og:site_name" content=""/>
+	<meta property="og:description" content=""/>
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+	<link rel="shortcut icon" href="favicon.ico">
+
+	<link href="https://fonts.googleapis.com/css?family=Raleway:200,300,400,700" rel="stylesheet">
+	
+	<!-- 引入bootstrap的css文件 -->-
+
+	<link rel="stylesheet" type="text/css" href="js/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="js/Validform/css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/common.css">
+	<link href="css/style-bar.css" rel="stylesheet" type="text/css">
+	<link href="css/style.css" rel="stylesheet" type="text/css">
+	<link href="css/sb-admin.css" rel="stylesheet">
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="css/OriginalHoverEffects/animate.css">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="css/OriginalHoverEffects/icomoon.css">
+	<!-- Bootstrap  -->
+	<link rel="stylesheet" href="css/OriginalHoverEffects/bootstrap.css">
+	<!-- Flexslider  -->
+	<link rel="stylesheet" href="css/OriginalHoverEffects/flexslider.css">
+	<!-- Theme style  -->
+	<link rel="stylesheet" href="css/OriginalHoverEffects/style.css">
+	<!-- Owl Carousel  -->
+	<link rel="stylesheet" href="css/owl.carousel.min.css">
+	<link rel="stylesheet" href="css/owl.theme.default.min.css">
+	<!-- 引入jquery的js文件 -->
+	<script type="text/javascript" src="js/bootstrap/js/jquery.js"></script>
+	<!-- 引入bootstrap的js文件 -->
+	<script type="text/javascript" src="js/bootstrap/js/bootstrap.js"></script>
+	<!-- 引入angularjs的js文件 -->
+	<script type="text/javascript" src="js/angularjs/angular.js"></script>
+	<script type="text/javascript" src="js/Validform/js/Validform_v5.3.2.js"></script>
+	<!-- 引入layer.js插件 -->
+	<script type="text/javascript" src="js/layer/layer.js"></script>
+	<!-- 引入全局配置js -->
+	<script type="text/javascript" src="js/global.js"></script>
+	<script src="js/modernizr-2.6.2.min.js"></script>
+
+</head>
+<body ng-controller="empController">
+<!-- 网页头部-->
+<script type="text/javascript">
+
+	//轮播时间间隔设置
+	$(document).ready(function(e) {
+		$('.carousel').carousel({
+        interval: 4000
+    });
+    $(document).ready(function(e) {
+        //初始化工具提示
+		$('a,button[data-toggle="tooltip"]').tooltip();		
+		$('#fuckhtml').popover();
+    	});
+	});
+
+	//消息提示整体亮度控制
+	$(document).ready(function(e) {		
+		//鼠标移上
+		$('#notice').mouseover(function(){
+			if($('#infonotice').text()!="0"){
+				$('#infonotice').addClass('noticeBg');	
+			}else{
+				$('#infonotice').css("background-color","#999");
+			}
+				
+		});		
+		//鼠标离开
+		$('#notice').mouseout(function(){
+			if($('#infonotice').text()!="0"){
+				$('#infonotice').removeClass('noticeBg');
+			}else{
+				$('#infonotice').css("background-color","#777");
+			}
+			
+		});						
+	});
+
+	//登陆界面模态层
+	$(document).ready(function(e) 
+	{        
+	/*单击按钮弹出模态层*/
+	$('#modalBtn').click(function(e){
+		$('#myModal').modal
+		(
+			{
+				backdrop:'static', /*点击黑色区域不关闭*/
+				keyboard:false     /*ESC键不关闭*/
+			}
+		);
+
+		$('#navigation').fadeOut("fast").addClass("fixed-top-changed");
+	});	
+
+
+    /*关闭时回到原来尺寸*/
+	$('#closemodal').click(function(e){
+		$('#navigation').removeClass("fixed-top-changed").delay(300).fadeIn("fast");
+		});
+    });
+	
+	// $(document).ready(function(){
+	// 	//一行代码搞定，提交表单的时候会自动触发验证程序
+	// 	$('#loginform').Validform({
+	// 		tiptype:0,
+	// 		ajaxPost:true,
+	// 		beforeSubmit:function(curform){return false;}
+	// 	});
+	// });
+	</script>
+	<!--登陆界面模态层-->
+	<div class="modal fade" id="myModal" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" id="closemodal" data-dismiss="modal">&times;</button>
+					<h4 class="text-center">切换用户</h4>
+				</div>
+
+				<div class="modal-body">
+					<form id="loginform" class="form-horizontal" method="post" action="login/login.action">
+			        	<div class="form-group"> 
+			                <label for="userName" class="col-sm-4 control-label">账号</label>
+			                <div class="col-sm-6">
+			                	<input type="text" datatype="*" name="empNum" id="empNum" class="form-control" placeholder="请输入账号">               
+			                </div>
+			            </div>
+			            
+			            <div class="form-group">
+			                <label for="userPwd" class="col-sm-4 control-label">密码</label>
+			                <div class="col-sm-6">
+			                	<input datatype="*" type="password" name="password" id="password" class="form-control" placeholder="请输入密码 ">              
+			                </div>
+			            </div>
+
+			            <div class="form-group">
+			            	<div class="col-sm-3 col-sm-offset-7">
+			            		<input type="submit" id="btn2" class="btn btn-primary btn-block" data-loading-text="正在确认..." value="登录"> 		            		
+			                </div>
+			            </div>
+		        	</form>  
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+	<!--/登陆界面模态层-->
+
+	<!--导航条-->
+	<nav id="navigation" class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+
+			<div class="navbar-header" >
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myCollapse1">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="./cloud_oa/pages/index.jsp" class="navbar-brand">
+					<img src="image/default-transparent.png" height="20"/>
+				</a>
+			</div>
+			<!--/.navbar-header-->
+
+			<form if="userform" action="">
+			<div class="collapse navbar-collapse navbar-right" id="myCollapse1">
+				<ul class="nav navbar-nav nav-right">
+					<li class="dropdown">
+						<a href="empInfo/query.action" data-toggle="dropdown">
+							当前用户：系统管理员
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu ">
+							<li>
+								<a href="#" id="modalBtn">切换用户</a>
+							</li>
+							<li>
+								<a href="./indexLogin.html">退出</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a id="notice" href="./在线消息-未阅消息.html">
+							新消息：
+							<span id="infonotice" class="badge">20</span>
+						</a>
+					</li>
+					
+				</ul>
+
+			</div>
+			<!--/.collapse-->
+			</form>
+
+		</div>
+		<!--/.container-fluid-->
+	</nav>
+	<!--/导航条-->
+
+	<!--轮播容器-->
+	<header id="myCarousel" class="carousel slide">
+		<!-- Indicators -->
+		<ol class="carousel-indicators">
+			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+			<li data-target="#myCarousel" data-slide-to="1"></li>
+			<li data-target="#myCarousel" data-slide-to="2"></li>
+		</ol>
+		
+		<!-- Wrapper for slides -->
+		<div class="carousel-inner">
+			<div class="item active">
+				<div class="fill" style="background-image:url('image/100.jpg');"></div>
+				<div class="carousel-caption">
+					<h2>学JAVA开发，到中软国际。</h2>
+				</div>
+			</div>
+			<div class="item">
+				<div class="fill" style="background-image:url('image/101.jpg');"></div>
+				<div class="carousel-caption">
+					<h2>学iOS/Android开发，到中软国际。</h2>
+				</div>
+			</div>
+			<div class="item">
+				<div class="fill" style="background-image:url('image/102.jpg');"></div>
+				<div class="carousel-caption">
+					<h2>学C++开发，到中软国际。</h2>
+				</div>
+			</div>
+		</div>
+		<!-- Controls -->
+		<a class="left carousel-control" href="#myCarousel" data-slide="prev">
+			<span class="icon-prev"></span>
+		</a>
+		<a class="right carousel-control" href="#myCarousel" data-slide="next">
+			<span class="icon-next"></span>
+		</a>
+	</header>
+	<!--/轮播容器-->
+	
+	<!--网页分类-->
+	<nav class="navbar navbar-default hidden-sm hidden-xs">
+		<div class="container">
+			<div class="collapse navbar-collapse" id="myCollapse2">
+			
+				<ul class="nav navbar-nav">
+				
+					<li>
+						<a href="./index.html">系统首页</a>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							工作安排
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="./工作安排-日程安排.html">日程安排</a>
+							</li>
+							<li>
+								<a href="./工作安排-综合查询.html">综合查询</a>
+							</li>
+							<li>
+								<a href="./工作安排-日历查看.html">日历查看</a>
+							</li>
+							<li>
+								<a href="./工作安排-代读设置.html">代读设置</a>
+							</li>
+							<li>
+								<a href="./工作安排-待办审批.html">待办审批</a>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							名片夹
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="./名片夹-联系人查询.html">联系人查询</a>
+							</li>
+							<li>
+								<a href="./名片夹-名片夹分类.html">名片夹分类</a>
+							</li>
+							<li>
+								<a href="./名片夹-公司通讯录.html">公司通讯录</a>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							消息收发
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="./在线消息-发送新消息.html">发送消息</a>
+							</li>
+							<li>
+								<a href="./在线消息-草稿箱.html">草稿箱</a>
+							</li>
+							<li>
+								<a href="./在线消息-发件箱.html">已发送消息</a>
+							</li>
+							<li>
+								<a href="./在线消息-收件箱.html">收到的消息</a>
+							</li>
+							<li>
+								<a href="./在线消息-未阅消息.html">未阅的消息(<span name="count">0</span>)</a>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							云文件存储
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="./云文件存储-云文件目录.html">云文件目录</a>
+							</li>
+							<li>
+								<a href="./云文件存储-我的云共享.html">我的云共享</a>
+							</li>
+						</ul>
+					</li>
+
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							会议管理
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="./会议管理-会议室信息.html">会议室信息</a>
+							</li>
+							<li>
+								<a href="./会议管理-会议预约情况.html">会议预约情况</a>
+							</li>
+							<li>
+								<a href="./会议管理-我要参加的会议.html">我要参加的会议</a>
+							</li>
+							<li>
+								<a href="./会议管理-我发布的会议.html">我发布的会议</a>
+							</li>
+						</ul>
+					</li>
+
+					
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							系统管理
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="QueryDept.html">部门管理</a>
+							</li>
+							<li>
+								<a href="QueryJob.html">职务管理</a>
+							</li>
+							<li>
+								<a href="QueryEmp.html">员工管理</a>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							资产管理
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="./资产管理-库存管理.html">库存管理</a>
+							</li>
+							<li>
+								<a href="./资产管理-办公用品消耗.html">办公用品消耗</a>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							车辆管理
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="./车辆管理-查看车辆信息.html">查看车辆信息</a>
+							</li>
+							<li>
+								<a href="./车辆管理-派车待办.html">派车待办</a>
+							</li>
+							<li>
+								<a href="./车辆管理-派车记录.html">派车记录</a>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							外派人才
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="./外派人才-外派人才列表.html">外派人才列表</a>
+							</li>
+							<li>
+								<a href="./外派人才-合作公司列表.html">合作公司列表</a>
+							</li>
+							<li>
+								<a href="./外派人才-公司需求列表.html">公司需求列表</a>
+							</li>
+							<li>
+								<a href="./外派人才-外派记录列表.html">外派记录显示</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="./系统公告.html">
+							系统公告
+						</a>
+					</li>
+				</ul>
+				
+			</div>
+			<!--/.collapse-->
+		</div>
+	</nav>
+	<!-- 网页头部完成-->	
+			<div class="row">
+				<div class="col-md-6 col-md-offset-3 text-center fh5co-heading animate-box">
+					<h2>Latest Projects</h2>
+					<p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. </p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 animate-box">
+					<a href="#" class="item-grid text-center">
+						<div class="image" style="background: url(image/image_1.jpg)"></div>
+						<div class="v-align">
+							<div class="v-align-middle">
+								<h3 class="title">Geographical App</h3>
+								<h5 class="category">Web Application</h5>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="col-md-4 animate-box">
+					<a href="#" class="item-grid text-center">
+						<div class="image" style="background: url(image/image_2.jpg)"></div>
+						<div class="v-align">
+							<div class="v-align-middle">
+								<h3 class="title">Geographical App</h3>
+								<h5 class="category">User Interface</h5>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="col-md-4 animate-box">
+					<a href="#" class="item-grid text-center">
+						<div class="image" style="background: url(image/image_3.jpg)"></div>
+						<div class="v-align">
+							<div class="v-align-middle">
+								<h3 class="title">Geographical App</h3>
+								<h5 class="category">Branded</h5>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="col-md-4 animate-box">
+					<a href="#" class="item-grid text-center">
+						<div class="image" style="background: url(image/image_4.jpg)"></div>
+						<div class="v-align">
+							<div class="v-align-middle">
+								<h3 class="title">Geographical App</h3>
+								<h5 class="category">Web</h5>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="col-md-4 animate-box">
+					<a href="#" class="item-grid text-center">
+						<div class="image" style="background: url(image/image_5.jpg)"></div>
+						<div class="v-align">
+							<div class="v-align-middle">
+								<h3 class="title">Geographical App</h3>
+								<h5 class="category">Illustration</h5>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="col-md-4 animate-box">
+					<a href="#" class="item-grid text-center">
+						<div class="image" style="background: url(image/image_6.jpg)"></div>
+						<div class="v-align">
+							<div class="v-align-middle">
+								<h3 class="title">Geographical App</h3>
+								<h5 class="category">Web Application</h5>
+							</div>
+						</div>
+					</a>
+				</div>
+				<div class="col-md-12 text-center animate-box">
+					<p><a href="#" class="btn btn-primary with-arrow">View More Projects <i class="icon-arrow-right"></i></a></p>
+				</div>
+			</div>
+	<!-- 网页底部开始 -->
+	<footer>
+		<div class="container-fluid footer_style">
+			<div class="col-md-6 col-md-offset-3 text-center">
+				<h4><img src="image/default-transparent.png" height="20"/></h4>
+				<p>地址：辽宁省大连市高新园区宏川东路20号黄泥川天地软件园金枫楼三层</p>
+				<p>Copyright 2009-2015 dletc.com.cn all rights reserved 网站备案号 : 辽ICP备09019147号-1</p>
+			</div>
+		</div>
+	</footer>
+<!-- 网页底部结束 -->
+
+<!-- jQuery -->
+	<script src="js/jquery.min.js"></script>
+	<!-- jQuery Easing -->
+	<script src="js/jquery.easing.1.3.js"></script>
+	<!-- Bootstrap -->
+	<script src="js/bootstrap.min.js"></script>
+	<!-- Waypoints -->
+	<script src="js/jquery.waypoints.min.js"></script>
+	<!-- Flexslider -->
+	<script src="js/jquery.flexslider-min.js"></script>
+	<!-- Stellar -->
+	<script src="js/jquery.stellar.min.js"></script>
+	
+	<!-- MAIN JS -->
+	<script src="js/main.js"></script>
+</body>
+</html>
